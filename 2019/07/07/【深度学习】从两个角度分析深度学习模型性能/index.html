@@ -16,7 +16,7 @@
 <meta property="og:description" content="前言阅读ComNet文章关于模型复杂度对比的表格时，一直不清楚intensity这一项代表的是什么。碰巧搜索到了Momenta的技术分享以及相关笔记。经过一番研究，终于明白了intensity的含义，现在总结出来以便日后查阅。 计算平台的两个指标：算力$\pi$与带宽$\beta$ 算力$\pi$：计算平台的性能上限，指的是一个计算平台每秒钟所能完成的最大浮点运算数。单位是FLOPS。（注意FLO">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://litterbrother.github.io/images/og_image.png">
-<meta property="og:updated_time" content="2019-07-27T13:16:28.701Z">
+<meta property="og:updated_time" content="2019-07-27T13:21:54.704Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习模型性能分析：计算能力与内存带宽">
 <meta name="twitter:description" content="前言阅读ComNet文章关于模型复杂度对比的表格时，一直不清楚intensity这一项代表的是什么。碰巧搜索到了Momenta的技术分享以及相关笔记。经过一番研究，终于明白了intensity的含义，现在总结出来以便日后查阅。 计算平台的两个指标：算力$\pi$与带宽$\beta$ 算力$\pi$：计算平台的性能上限，指的是一个计算平台每秒钟所能完成的最大浮点运算数。单位是FLOPS。（注意FLO">
@@ -151,7 +151,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    9 分钟 读完 (大约 1325 个字)
+                    9 分钟 读完 (大约 1327 个字)
                 </span>
                 
                 
@@ -170,8 +170,8 @@
 <li><strong>带宽</strong>$\beta$：计算平台的<strong>带宽上限</strong>，指的是一个计算平台每秒钟所能完成的最大内存交换量。单位是<code>Byte/s</code>。</li>
 <li><strong>运算强度上限</strong>$I_{\mathrm{max}}$：上述两个指标相除即可得到计算平台的<strong>计算强度上限</strong>，指的是单位内存交换最多用来进行多少次计算。单位是<code>FLOPs/Byte</code>。</li>
 </ul>
-<script type="math/tex; mode=display">
-I_{\mathrm{max}}=\frac{\pi}{\beta}</script><blockquote>
+<p>$$<br>I_{\mathrm{max}}=\frac{\pi}{\beta}<br>$$</p>
+<blockquote>
 <p>注：这里说的”内存“指广义上的内存。对于CPU计算平台而言指的是真正的内存，而对于GPU计算平台指的是显存。</p>
 </blockquote>
 <h2 id="模型的两个指标：计算量与访存量"><a href="#模型的两个指标：计算量与访存量" class="headerlink" title="模型的两个指标：计算量与访存量"></a>模型的两个指标：计算量与访存量</h2><ul>
@@ -181,14 +181,14 @@ I_{\mathrm{max}}=\frac{\pi}{\beta}</script><blockquote>
 <li><strong>模型的理论性能</strong>$P$：最关心的指标，即模型在计算平台上所能达到的每秒浮点运算次数（理论值），单位是FLOPS。下面介绍的Roofline Model给出计算这个指标的方法。</li>
 </ul>
 <h2 id="Roofline-Model"><a href="#Roofline-Model" class="headerlink" title="Roofline Model"></a>Roofline Model</h2><p>Roofline Model想传达的事情是：<strong>模型在一个计算平台的限制下，到底能达到多快的浮点计算速度</strong>。更具体点来说，Roofline Model解决的是<strong>计算量为A且访存量为B的模型在算力为C且带宽为D的计算平台所能达到的理论性能上限E是多少</strong>这个问题。</p>
-<p><img src="https://raw.githubusercontent.com/LitterBrother/PicHost/master/img/Roofline.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/LitterBrother/PicHost/master/img/Roofline.png" alt="模型"></p>
 <h3 id="Roofline的形态"><a href="#Roofline的形态" class="headerlink" title="Roofline的形态"></a>Roofline的形态</h3><p>所谓Roofline，指的是由计算平台的算力和带宽上限这两个参数所决定的“屋顶”形态，如上图所示。坐标轴分别是计算性能（纵轴）和算法的运算强度（横轴）。</p>
 <ul>
 <li><strong>算力</strong>决定“屋顶”的高度（绿色线段）</li>
 <li><strong>带宽</strong>决定“房檐”的斜率（红色线段）</li>
 </ul>
-<h3 id="Roofline划分出的两个瓶颈区域"><a href="#Roofline划分出的两个瓶颈区域" class="headerlink" title="Roofline划分出的两个瓶颈区域"></a>Roofline划分出的两个瓶颈区域</h3><script type="math/tex; mode=display">
-P=\left\{\begin{array}{ll}{\beta \cdot I,} & {\text { when } I<I_{\text {max}} \quad {\text{Bandwidth Bound}} } \\ {\pi,} & {\text { when } I \geq I_{\text {max}} \quad { \text{Computation Bound }}}\end{array}\right.</script><ul>
+<h3 id="Roofline划分出的两个瓶颈区域"><a href="#Roofline划分出的两个瓶颈区域" class="headerlink" title="Roofline划分出的两个瓶颈区域"></a>Roofline划分出的两个瓶颈区域</h3><p>$$<br>P=\left{\begin{array}{ll}{\beta \cdot I,} &amp; {\text { when } I&lt;I_{\text {max}} \quad {\text{Bandwidth Bound}} } \ {\pi,} &amp; {\text { when } I \geq I_{\text {max}} \quad { \text{Computation Bound }}}\end{array}\right.<br>$$</p>
+<ul>
 <li><p>带宽瓶颈区域（Bandwidth Bound）</p>
 <p>当运算强度较小时，曲线处于左边的上升区，即计算性能实际被内存带宽限制，有很多计算处理单元是闲置的。随着算法运算强度上升，在相同数量的数据下算法可以完成更多运算，于是闲置的运算单元越来越少，这时候计算性能就会上升。我们把$I&lt;I_{\text{max}}$的区域称为带宽瓶颈区域。</p>
 </li>
